@@ -20,7 +20,7 @@ export default function Home() {
             </code>
             .
           </li>
-          <li>Save and see your changes instantlys12345678.</li>
+          <li>Save and see your changes instantlys123456789.</li>
         </ol>
 
         <div className="flex gap-4 items-center flex-col sm:flex-row">
