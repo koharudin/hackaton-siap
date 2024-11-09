@@ -14,20 +14,43 @@ datasource db {
 }
 
 model UnitKerja {
-  id            Int     @id @default(autoincrement())
-  parent_id     Int?
-  ObjParent     UnitKerja? @relation("BlogOwnerHistory",fields: [parent_id], references: [id])
-  ListChildren  UnitKerja[] @relation("BlogOwnerHistory")
-  name          String
-  createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+  id              Int         @id @default(autoincrement())
+  parent_id       Int?
+  parentUnitKerja UnitKerja?  @relation("UnitKerjaParent", fields: [parent_id], references: [id])
+  name            String
+  createdAt       DateTime    @default(now()) @map(name: "created_at")
+  updatedAt       DateTime    @updatedAt @map(name: "updated_at")
+  Employee        Employee[]  @relation("unitEmployeerel")
+  // This is the opposite relation, pointing to all child units
+  childUnitKerja  UnitKerja[] @relation("UnitKerjaParent") // This is the reverse relation
+  pejabat_id      Int?
+  pejabat         Employee?   @relation(fields: [pejabat_id], references: [id])
+
   @@map(name: "unit_kerja")
 }
+
 model Employee {
-  id         Int     @id @default(autoincrement())
-  name          String
-  email         String?   @unique
-  createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+  id           Int           @id @default(autoincrement())
+  name         String
+  email        String?       @unique
+  unit_id      Int
+  unitEmployee UnitKerja     @relation("unitEmployeerel", fields: [unit_id], references: [id])
+  createdAt    DateTime      @default(now()) @map(name: "created_at")
+  updatedAt    DateTime      @default(now()) @updatedAt @map(name: "updated_at")
+  UnitKerja    UnitKerja[]
+  RiwayatAnak  RiwayatAnak[] @relation("riwayat_anak")
+
   @@map(name: "employees")
+}
+
+model RiwayatAnak {
+  id          Int      @id @default(autoincrement())
+  employee_id Int
+  employee    Employee @relation("riwayat_anak", fields: [employee_id], references: [id])
+  name String 
+  birth_date DateTime?
+  createdAt DateTime @default(now()) @map(name:"created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map(name: "updated_at")
+ 
+  @@map(name: "riwayat_anak")
 }
