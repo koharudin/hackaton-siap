@@ -1,10 +1,9 @@
 import { PrismaClient } from "@prisma/client"
 
-export default () => {
+export default async () => {
   const prisma = new PrismaClient()
   const callUnit = async function () {
     const units = await prisma.unitKerja.findMany()
-    console.log(units)
     return units
   }
   const createUnit = async function (){
@@ -15,6 +14,8 @@ export default () => {
     })
   }
   //createUnit()
-  const x = callUnit();
+  const x = await callUnit();
+  console.log("xxxx")
+  console.log(JSON.stringify(x))
   return <>Manage Unit Kerja {JSON.stringify(x)}xx</>
 }
